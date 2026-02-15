@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* --------------------------------
+   Base Reset & Performance
+--------------------------------- */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-primary text-white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent layout shift from scrollbars */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* --------------------------------
+   Selection Styling
+--------------------------------- */
+
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: white;
+}
+
+/* --------------------------------
+   Smooth Scrollbar (Webkit)
+--------------------------------- */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* --------------------------------
+   Hero-Level Ambient Animations
+--------------------------------- */
+
+/* Slow gradient shimmer */
+@keyframes shimmerSlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.shimmer-text {
+  background-size: 200% 200%;
+  animation: shimmerSlow 18s linear infinite;
+}
+
+/* Subtle floating motion */
+@keyframes subtleFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-2px); }
+}
+
+.subtle-float {
+  animation: subtleFloat 10s ease-in-out infinite;
+}
+
+/* Ultra subtle pulse */
+@keyframes ambientPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.97; }
+}
+
+.ambient-pulse {
+  animation: ambientPulse 8s ease-in-out infinite;
+}
+
+/* --------------------------------
+   Reduced Motion Support (Accessibility)
+--------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-text,
+  .subtle-float,
+  .ambient-pulse {
+    animation: none !important;
+  }
+}

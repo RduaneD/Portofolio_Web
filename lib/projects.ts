@@ -304,7 +304,7 @@ export const projects: ProjectDetail[] = [
     badge: "Competition",
     isPublic: true,
 
-    video: "/videos/digitaleternal-demo.mp4"
+    video: "/videos/digitaleternal-Demo.mp4"
   },
 
   {

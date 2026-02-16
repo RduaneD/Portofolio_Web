@@ -66,6 +66,11 @@ prisma/*.db-journal
 coverage/
 
 # --------------------------------
+# Large / Private Media Files
+# --------------------------------
+public/videos/yummychef-demo.mp4
+public/apps/Yummy_Chef.apk
+# --------------------------------
 # Misc
 # --------------------------------
 *.pem

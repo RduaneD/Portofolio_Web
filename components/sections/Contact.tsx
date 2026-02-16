@@ -6,18 +6,26 @@ import {
   useSpring,
   useMotionTemplate,
 } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Container from "@/components/ui/Container";
 import {
   FaLinkedin,
   FaGithub,
   FaWhatsapp,
   FaEnvelope,
+  FaCopy,
+  FaCheck,
 } from "react-icons/fa";
+
+/* --------------------------------
+   COMPONENT
+--------------------------------- */
 
 export default function Contact() {
   const ref = useRef<HTMLDivElement>(null);
+  const [copied, setCopied] = useState(false);
 
+  /* mouse glow */
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -26,105 +34,132 @@ export default function Contact() {
 
   const glow = useMotionTemplate`
     radial-gradient(
-      700px at ${smoothX}px ${smoothY}px,
-      rgba(59,130,246,0.08),
+      800px at ${smoothX}px ${smoothY}px,
+      rgba(59,130,246,0.09),
       transparent 60%
     )
   `;
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const bounds = e.currentTarget.getBoundingClientRect();
-    mouseX.set(e.clientX - bounds.left);
-    mouseY.set(e.clientY - bounds.top);
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  /* copy email */
+
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText("muhamadridwanbjm@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <section
       id="contact"
       ref={ref}
-      onMouseMove={handleMouseMove}
+      onMouseMove={handleMove}
       className="relative py-40 overflow-hidden"
     >
-      {/* Cinematic Lighting */}
+      {/* glow */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{ background: glow }}
       />
 
-      {/* Noise Overlay */}
-      <div className="noise-overlay" />
-
       <Container>
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
+        <div className="max-w-3xl mx-auto text-center relative z-10">
 
-          {/* Title (BACK TO ACCENT BLUE) */}
+          {/* TITLE */}
           <motion.h2
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-5xl font-bold mb-8 text-accent tracking-tight"
+            className="text-5xl font-bold mb-6 text-accent"
           >
-            Let’s Work Together
+            Let’s Build Something Great
           </motion.h2>
-          <motion.div
-              initial={{ opacity: 0, width: 0 }}
-              whileInView={{ opacity: 1, width: 120 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="h-px bg-accent/40 mx-auto mt-6"
-            />
 
-          {/* Subtitle */}
-          <motion.p
+          {/* availability */}
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            viewport={{ once: true }}
-            className="text-slate-400 text-lg mb-16"
+            className="inline-flex items-center gap-2 mb-10 px-5 py-2 rounded-full bg-green-500/10 text-green-400 text-sm border border-green-500/20"
           >
-            Interested in collaborating, hiring, or discussing a project?
-          </motion.p>
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            Available for projects & roles
+          </motion.div>
 
-          {/* Glass Card */}
+          {/* SUBTITLE */}
+          <p className="text-slate-400 text-lg mb-16">
+            Open for collaborations, engineering roles, or technical discussions.
+          </p>
+
+          {/* MAIN CONTACT CARD */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            viewport={{ once: true }}
             className="p-12 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl"
           >
-            <div className="flex flex-wrap justify-center gap-10 text-lg">
+            {/* PRIMARY EMAIL */}
+            <div className="mb-12">
 
-              <ContactLink
-                href="mailto:muhamadridwanbjm@gmail.com"
-                icon={<FaEnvelope />}
-                label="Email"
-              />
+              <p className="text-sm text-slate-500 mb-4 uppercase tracking-wider">
+                Primary Contact
+              </p>
+
+              <div className="flex flex-col items-center gap-5">
+
+                <a
+                  href="mailto:muhamadridwanbjm@gmail.com"
+                  className="text-xl font-semibold text-white hover:text-accent transition"
+                >
+                  muhamadridwanbjm@gmail.com
+                </a>
+
+                <button
+                  onClick={copyEmail}
+                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition"
+                >
+                  {copied ? <FaCheck /> : <FaCopy />}
+                  {copied ? "Copied!" : "Copy email"}
+                </button>
+
+                <p className="text-xs text-slate-500">
+                  Typical response time: &lt; 24 hours
+                </p>
+
+              </div>
+            </div>
+
+            {/* CHANNELS */}
+            <div className="flex flex-wrap justify-center gap-10">
 
               <ContactLink
                 href="https://linkedin.com/in/muhammad-riduan-018890256"
                 icon={<FaLinkedin />}
                 label="LinkedIn"
-                external
               />
 
               <ContactLink
                 href="https://github.com/RduaneD"
                 icon={<FaGithub />}
                 label="GitHub"
-                external
               />
 
               <ContactLink
                 href="https://wa.me/6285849985763"
                 icon={<FaWhatsapp />}
                 label="WhatsApp"
-                external
               />
 
             </div>
-          </motion.div>
 
+            {/* FOOTER TRUST */}
+            <div className="mt-14 text-xs text-slate-500">
+              Prefer structured communication? Email is recommended for project discussions.
+            </div>
+
+          </motion.div>
         </div>
       </Container>
     </section>
@@ -132,31 +167,29 @@ export default function Contact() {
 }
 
 /* --------------------------------
-   Reusable Contact Link
+   CONTACT LINK
 --------------------------------- */
 
 function ContactLink({
   href,
   icon,
   label,
-  external = false,
 }: {
   href: string;
   icon: React.ReactNode;
   label: string;
-  external?: boolean;
 }) {
   return (
     <motion.a
-      whileHover={{ y: -4, scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 220, damping: 18 }}
+      whileHover={{ y: -5, scale: 1.05 }}
+      transition={{ type: "spring", stiffness: 260, damping: 18 }}
       href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className="flex items-center gap-3 text-slate-300 hover:text-accent transition duration-300"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex flex-col items-center gap-2 text-slate-400 hover:text-accent transition"
     >
-      <span className="text-xl">{icon}</span>
-      {label}
+      <span className="text-2xl">{icon}</span>
+      <span className="text-sm">{label}</span>
     </motion.a>
   );
 }

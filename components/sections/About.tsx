@@ -13,40 +13,58 @@ import { useRef, useEffect, useState } from "react";
 import Container from "@/components/ui/Container";
 import { Cpu, ShieldCheck, Layers } from "lucide-react";
 
-/* ------------------------------
-   Data
---------------------------------*/
+/* --------------------------------
+   HIGHLIGHTS — ENGINEERING IDENTITY
+-------------------------------- */
 
 const highlights = [
   {
-    title: "System Thinking",
-    desc: "Designing software as interconnected components, not isolated features.",
+    title: "Systems Architecture Mindset",
+    desc: "Designed scalable backend infrastructures and distributed services that support real production usage.",
     icon: Cpu,
   },
   {
-    title: "Reliability First",
-    desc: "Every architectural decision anticipates failure, recovery, and observability.",
+    title: "Reliability Engineering",
+    desc: "Implemented validation layers, fault handling, and observability structures for resilient systems.",
     icon: ShieldCheck,
   },
   {
-    title: "Long-Term Maintainability",
-    desc: "Code should remain understandable months later — even under pressure.",
+    title: "Maintainable by Design",
+    desc: "Architected modular systems so future engineers can extend them without structural rewrites.",
     icon: Layers,
   },
 ];
 
+/* --------------------------------
+   STATS
+-------------------------------- */
+
 const stats = [
-  { value: 12, label: "Projects Engineered" },
-  { value: 6, label: "Systems Deployed" },
-  { value: 3, label: "Cloud Environments" },
+  { value: 8, label: "Systems Built" },
+  { value: 15, label: "API Endpoints Designed" },
+  { value: 3, label: "Production Deployments" },
 ];
 
-/* ------------------------------
-   Main Component
---------------------------------*/
+/* --------------------------------
+   SYSTEM LAYERS VISUAL
+-------------------------------- */
+
+const layers = [
+  "Client Layer",
+  "API Gateway",
+  "Auth Service",
+  "Business Logic",
+  "Database Layer",
+  "Cloud Infrastructure",
+];
+
+/* --------------------------------
+   COMPONENT
+-------------------------------- */
 
 export default function About() {
   const ref = useRef<HTMLDivElement>(null);
+  const [activeLayer, setActiveLayer] = useState<number | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -56,6 +74,7 @@ export default function About() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.97]);
 
   /* Mouse Glow */
+
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -64,8 +83,8 @@ export default function About() {
 
   const glow = useMotionTemplate`
     radial-gradient(
-      600px at ${smoothX}px ${smoothY}px,
-      rgba(59,130,246,0.08),
+      700px at ${smoothX}px ${smoothY}px,
+      rgba(59,130,246,0.07),
       transparent 60%
     )
   `;
@@ -79,11 +98,10 @@ export default function About() {
   return (
     <section
       ref={ref}
-      onMouseMove={handleMouseMove}
       id="about"
+      onMouseMove={handleMouseMove}
       className="relative py-40 overflow-hidden"
     >
-      {/* Reactive Glow */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{ background: glow }}
@@ -93,110 +111,120 @@ export default function About() {
         <Container>
           <div className="max-w-6xl mx-auto">
 
-            {/* Heading */}
+            {/* TITLE */}
             <motion.h2
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="text-5xl font-bold text-center mb-6 text-accent"
+              className="text-5xl font-bold text-center text-accent mb-6"
             >
               About Me
             </motion.h2>
-            <motion.div
-              initial={{ opacity: 0, width: 0 }}
-              whileInView={{ opacity: 1, width: 120 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="h-px bg-accent/40 mx-auto mt-6"
-            />
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              viewport={{ once: true }}
-              className="text-center text-slate-400 text-lg mb-24 max-w-3xl mx-auto"
-            >
-              I don’t just build features — I engineer systems that remain stable as complexity grows.
-            </motion.p>
+            <p className="text-center text-slate-400 text-lg mb-28 max-w-3xl mx-auto">
+              I engineer production-grade systems designed to remain stable,
+              scalable, and understandable — even as complexity grows.
+            </p>
 
-            {/* Narrative Grid */}
+            {/* GRID */}
             <div className="grid md:grid-cols-2 gap-24 items-center">
 
-              {/* LEFT — STORY */}
+              {/* LEFT TEXT */}
               <div className="space-y-8 text-lg leading-relaxed text-slate-300">
-                <Narrative delay={0}>
-                  I specialize in backend architecture, secure APIs, and cloud-native infrastructure.
+
+                <Narrative>
+                  I specialize in backend architecture, API systems, and cloud deployments. My work spans logistics optimization platforms, enterprise portals, and intelligent systems.
                 </Narrative>
 
                 <Narrative delay={0.1}>
-                  My focus is ensuring software survives real usage — not just ideal conditions.
+                  I focus on designing software that survives real-world usage, not just controlled demo environments.
                 </Narrative>
 
                 <Narrative delay={0.2}>
-                  Performance, scalability, and operational clarity guide every technical decision I make.
+                  Every system I build is structured for clarity, maintainability, and scalability so it can evolve safely as requirements change.
                 </Narrative>
+
+                <Narrative delay={0.3}>
+                  I treat engineering as architecture design — not feature assembly.
+                </Narrative>
+
               </div>
 
-              {/* RIGHT — STATS */}
+              {/* RIGHT STATS */}
               <div className="space-y-8">
                 {stats.map((stat, i) => (
                   <motion.div
                     key={stat.label}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
                     transition={{ delay: i * 0.2 }}
                     whileHover={{ y: -8 }}
-                    className="relative p-10 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg hover:border-accent transition duration-300"
+                    className="p-10 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-lg"
                   >
                     <Counter target={stat.value} />
-                    <div className="text-slate-400 text-sm uppercase tracking-wider mt-2">
+                    <div className="text-slate-400 text-sm uppercase mt-2">
                       {stat.label}
                     </div>
-
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 hover:opacity-100 transition duration-500" />
                   </motion.div>
                 ))}
               </div>
 
             </div>
 
-            {/* Divider */}
-            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-32" />
+            {/* SYSTEM ARCHITECTURE VISUAL */}
+            <div className="my-36">
 
-            {/* Principles */}
+              <h3 className="text-center text-xl font-semibold mb-12">
+                System Architecture Perspective
+              </h3>
+
+              <div className="flex flex-col items-center gap-4">
+
+                {layers.map((layer, i) => (
+                  <motion.div
+                    key={layer}
+                    onMouseEnter={() => setActiveLayer(i)}
+                    onMouseLeave={() => setActiveLayer(null)}
+                    animate={{
+                      scale: activeLayer === i ? 1.05 : 1,
+                      opacity: activeLayer === null || activeLayer === i ? 1 : 0.5,
+                    }}
+                    className="px-10 py-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md w-72 text-center"
+                  >
+                    {layer}
+                  </motion.div>
+                ))}
+
+              </div>
+            </div>
+
+            {/* HIGHLIGHTS */}
             <div className="grid md:grid-cols-3 gap-12">
+
               {highlights.map((item, i) => {
                 const Icon = item.icon;
+
                 return (
                   <motion.div
                     key={item.title}
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
                     transition={{ delay: i * 0.15 }}
                     whileHover={{ y: -10 }}
-                    className="group relative p-8 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 hover:border-accent transition duration-300"
+                    className="p-8 rounded-3xl border border-white/10 bg-white/5"
                   >
-                    {/* Icon */}
-                    <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 group-hover:scale-110 transition">
-                      <Icon size={22} />
-                    </div>
+                    <Icon className="text-accent mb-4" size={26} />
 
-                    <h3 className="text-lg font-semibold mb-3 text-white">
+                    <h3 className="font-semibold mb-2">
                       {item.title}
                     </h3>
 
-                    <p className="text-slate-400 text-sm leading-relaxed">
+                    <p className="text-sm text-slate-400">
                       {item.desc}
                     </p>
-
-                    {/* Hover Glow */}
-                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-500" />
                   </motion.div>
                 );
               })}
+
             </div>
 
           </div>
@@ -206,9 +234,9 @@ export default function About() {
   );
 }
 
-/* ------------------------------
-   Narrative Paragraph
---------------------------------*/
+/* --------------------------------
+   NARRATIVE
+-------------------------------- */
 
 function Narrative({
   children,
@@ -221,27 +249,26 @@ function Narrative({
     <motion.p
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay }}
+      transition={{ delay }}
     >
       {children}
     </motion.p>
   );
 }
 
-/* ------------------------------
-   Counter
---------------------------------*/
+/* --------------------------------
+   COUNTER
+-------------------------------- */
 
 function Counter({ target }: { target: number }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     const controls = animate(0, target, {
-      duration: 1.3,
+      duration: 1.4,
       ease: "easeOut",
-      onUpdate(value) {
-        setCount(Math.floor(value));
+      onUpdate(v) {
+        setCount(Math.floor(v));
       },
     });
 

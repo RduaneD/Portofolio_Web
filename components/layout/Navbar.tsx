@@ -19,22 +19,19 @@ export default function Navbar() {
   const { scrollYProgress } = useScroll();
 
   /* --------------------------------
-     Scroll Background Effect
-  --------------------------------- */
+     Scroll Background
+  -------------------------------- */
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   /* --------------------------------
-     IntersectionObserver (Active Section)
-  --------------------------------- */
+     Active Section Observer
+  -------------------------------- */
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -46,8 +43,7 @@ export default function Navbar() {
         });
       },
       {
-        rootMargin: "-40% 0px -50% 0px",
-        threshold: 0,
+        rootMargin: "-45% 0px -45% 0px",
       }
     );
 
@@ -59,19 +55,36 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  /* --------------------------------
+     Smooth Scroll Handler
+  -------------------------------- */
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    window.scrollTo({
+      top: el.offsetTop - 70,
+      behavior: "smooth",
+    });
+    setOpen(false);
+  };
+
+  /* --------------------------------
+     JSX
+  -------------------------------- */
+
   return (
     <>
       <motion.nav
-        initial={false}
-        animate={{
-          backdropFilter: scrolled ? "blur(14px)" : "blur(0px)",
-        }}
+        initial={{ y: -60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6 }}
         className={`
           fixed top-0 left-0 w-full z-50
-          transition-colors duration-300
+          transition duration-300
           ${
             scrolled
-              ? "bg-slate-950/70 border-b border-white/10 shadow-xl"
+              ? "bg-slate-950/70 backdrop-blur-xl border-b border-white/10 shadow-xl"
               : "bg-transparent"
           }
         `}
@@ -79,12 +92,12 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
 
           {/* Logo */}
-          <a
-            href="#"
+          <button
+            onClick={() => scrollTo("about")}
             className="text-xl font-bold tracking-wide text-accent hover:opacity-80 transition"
           >
             Riduan
-          </a>
+          </button>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center gap-10 text-sm font-medium relative">
@@ -92,9 +105,10 @@ export default function Navbar() {
               const isActive = active === link.id;
 
               return (
-                <a
+                <motion.button
                   key={link.id}
-                  href={`#${link.id}`}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => scrollTo(link.id)}
                   className={`
                     relative px-1 transition-colors
                     ${
@@ -117,7 +131,7 @@ export default function Navbar() {
                       }}
                     />
                   )}
-                </a>
+                </motion.button>
               );
             })}
           </div>
@@ -132,7 +146,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Scroll Progress Bar (NOW BELOW NAVBAR CONTENT) */}
+        {/* Scroll Progress */}
         <motion.div
           className="h-[2px] bg-accent origin-left"
           style={{ scaleX: scrollYProgress }}
@@ -142,21 +156,20 @@ export default function Navbar() {
         <AnimatePresence>
           {open && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -15 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25 }}
               className="md:hidden bg-slate-950/95 backdrop-blur border-t border-white/10"
             >
               <div className="flex flex-col items-center gap-8 py-10">
                 {links.map((link, i) => (
-                  <motion.a
+                  <motion.button
                     key={link.id}
-                    href={`#${link.id}`}
-                    onClick={() => setOpen(false)}
+                    onClick={() => scrollTo(link.id)}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.06 }}
+                    transition={{ delay: i * 0.05 }}
                     className={`
                       text-lg transition
                       ${
@@ -167,7 +180,7 @@ export default function Navbar() {
                     `}
                   >
                     {link.name}
-                  </motion.a>
+                  </motion.button>
                 ))}
               </div>
             </motion.div>
@@ -175,7 +188,6 @@ export default function Navbar() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* Spacer */}
       <div className="h-[80px]" />
     </>
   );
